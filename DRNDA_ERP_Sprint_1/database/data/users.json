@@ -1,0 +1,9 @@
+[
+    {
+        "id": 1,
+        "name": "Administrator",
+        "email": "admin@drnda.local",
+        "password_hash": "$2y$12$XNoIboDTZNxUgmv.u9.dS.QAsQBYC8DvxjjGSKk2h3TiY\/kkHOrbu",
+        "role": "ADMIN"
+    }
+]

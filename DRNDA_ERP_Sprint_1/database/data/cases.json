@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "case_number": "PO-2026-000001",
+        "deceased_name": "Petar Petrović",
+        "deceased_birth_date": null,
+        "deceased_death_date": "2026-07-15",
+        "contact_name": "Milan Petrović",
+        "contact_phone": "064 123 4567",
+        "funeral_at": "2026-07-15 13:00:00",
+        "funeral_place": "Staro groblje Požarevac",
+        "case_type": "DOMACI",
+        "stage": "NOVO",
+        "notes": "Primer slučaja za početni ekran.",
+        "created_by": 1,
+        "created_at": "2026-07-15T22:09:39+00:00"
+    }
+]
