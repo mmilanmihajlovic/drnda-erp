@@ -13,28 +13,27 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-# Korak 1: instaliraj PHP pakete BEZ post-install skripti
-# (artisan i bootstrap/ jos ne postoje u ovom trenutku)
+# Instaliraj PHP pakete bez post-install skripti
 COPY composer.json composer.lock* ./
 RUN composer install --optimize-autoloader --no-dev --no-interaction --no-scripts
 
-# Korak 2: sada kopiraj SVE fajlove (artisan, bootstrap/, config/, ...)
+# Kopiraj SVE fajlove
 COPY . .
 
-# Korak 3: pokrecemo post-install skripte SAD kad su svi fajlovi prisutni
-RUN php artisan package:discover --ansi
-
-# Korak 4: kreiraj storage direktorijume
+# Kreiraj OBAVEZNE direktorijume pre package:discover
 RUN mkdir -p \
+    bootstrap/cache \
     storage/app/public \
     storage/framework/cache \
     storage/framework/sessions \
     storage/framework/views \
     storage/logs \
-    bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 775 bootstrap/cache storage
 
-# Korak 5: build Vite assets
+# Sada pokrecemo package:discover (bootstrap/cache postoji)
+RUN php artisan package:discover --ansi
+
+# Build Vite assets
 RUN npm install --no-optional && npm run build
 
 EXPOSE 8080
