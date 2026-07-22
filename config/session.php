@@ -3,6 +3,8 @@
 use Illuminate\Support\Str;
 
 return [
+    // Koristimo FILE driver - sigurniji za Railway deploy
+    // (DATABASE driver zahteva sessions tabelu u bazi)
     'driver' => env('SESSION_DRIVER', 'file'),
     'lifetime' => env('SESSION_LIFETIME', 120),
     'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', false),
