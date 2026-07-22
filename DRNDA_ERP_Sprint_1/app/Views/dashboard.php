@@ -1,3 +1,0 @@
-<header class="page-head"><div><h1>Komandni centar</h1><p>Pregled najvažnijih aktivnosti.</p></div><a class="button" href="/?page=case-create">+ Novi slučaj</a></header>
-<div class="stats"><div class="card"><span>Aktivni slučajevi</span><strong><?= (int)$active ?></strong></div><div class="card"><span>Sahrane danas</span><strong><?= (int)$today ?></strong></div><div class="card"><span>Hitni zadaci</span><strong>0</strong></div><div class="card"><span>Za naplatu</span><strong>0 RSD</strong></div></div>
-<section class="panel"><h2>Osnovni workflow</h2><p>Novi slučaj → Pogrebno → Operativa i Cvećara → Administracija → Finansije → Zatvaranje slučaja.</p></section>
