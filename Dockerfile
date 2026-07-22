@@ -1,27 +1,29 @@
-FROM php:8.3-cli-bookworm
+FROM php:8.3-cli-alpine
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
+# Ogranichi Node.js heap na 256 MB da sprecimo OOM na Railway-u
+ENV NODE_OPTIONS="--max-old-space-size=256"
 
-# Install ALL deps in one step - using Debian bookworm's native nodejs (v18)
-RUN apt-get update -y && apt-get install -y \
-    git curl zip unzip \
-    libonig-dev libxml2-dev libzip-dev \
+# Alpine apk je 10x laxsi od Debian apt-get
+RUN apk add --no-cache \
+    git curl zip unzip bash \
+    oniguruma-dev libxml2-dev libzip-dev \
     nodejs npm \
-    && docker-php-ext-install pdo_mysql mbstring xml zip \
-    && rm -rf /var/lib/apt/lists/*
+    && docker-php-ext-install pdo_mysql mbstring xml zip
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-# Copy composer files first (Docker cache optimization)
-COPY composer.json ./
-COPY composer.lock* ./
+# PHP zavisnosti prvo (brzi cache sloj)
+COPY composer.json composer.lock* ./
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 
-# Copy rest of app + build assets
+# Kopiraj sve fajlove
 COPY . .
-RUN npm install && npm run build
+
+# Build Vite assets
+RUN npm ci --no-optional && npm run build
 
 EXPOSE 8080
 
