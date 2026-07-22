@@ -13,7 +13,7 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-# PHP paketi bez post-install skripti (artisan ne postoji jos)
+# PHP paketi bez post-install skripti
 COPY composer.json composer.lock* ./
 RUN composer install --optimize-autoloader --no-dev --no-interaction --no-scripts
 
@@ -30,12 +30,13 @@ RUN mkdir -p \
     storage/logs \
     && chmod -R 775 bootstrap/cache storage
 
-# package:discover (artisan + bootstrap/ su sada prisutni)
+# package:discover
 RUN php artisan package:discover --ansi
 
-# npm install BEZ --no-optional (rollup treba @rollup/rollup-linux-x64-musl na Alpine)
+# Build Vite assets (bez --no-optional, rollup treba musl native na Alpine)
 RUN npm install && npm run build
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "php artisan migrate --force && php artisan db:seed --force && php artisan storage:link --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
+# SAMO server — migrate/seed se rade u Railway releaseCommand
+CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
