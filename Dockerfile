@@ -33,6 +33,6 @@ RUN npm install && npm run build
 
 EXPOSE 8080
 
-# NEMA config:clear — to je uzrokovalo "Invalid URI: Host is malformed" crash loop
-# migrate/seed su u railway.json releaseCommand
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+# Koristimo PHP built-in server direktno na public/ folder
+# Ovo je stabilnije od "artisan serve" u Dockeru
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
