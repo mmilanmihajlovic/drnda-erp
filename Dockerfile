@@ -33,6 +33,6 @@ RUN npm install && npm run build
 
 EXPOSE 8080
 
-# Pokrecemo migrate odmah u CMD (ne u releaseCommand) da vidimo greske u logovima
-# APP_KEY mora biti setovan u Railway Variables
-CMD ["sh", "-c", "echo Starting... && echo PORT=$PORT && php artisan config:clear && php artisan migrate --force 2>&1 && php artisan db:seed --force 2>&1 && php artisan storage:link --force 2>&1 && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
+# NEMA config:clear — to je uzrokovalo "Invalid URI: Host is malformed" crash loop
+# migrate/seed su u railway.json releaseCommand
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
