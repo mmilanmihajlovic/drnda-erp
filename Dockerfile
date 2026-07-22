@@ -3,7 +3,6 @@ FROM php:8.3-cli-alpine
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV NODE_OPTIONS="--max-old-space-size=256"
 
-# Alpine apk je mnogo laxsi od Debian apt-get
 RUN apk add --no-cache \
     git curl zip unzip bash \
     oniguruma-dev libxml2-dev libzip-dev \
@@ -14,11 +13,13 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-# PHP zavisnosti (cache sloj)
-COPY composer.json composer.lock* ./
+# Kopiramo composer.json + artisan zajedno — artisan mora biti tu
+# pre nego sto "composer install" pokrene "@php artisan package:discover"
+COPY composer.json composer.lock* artisan ./
+
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 
-# Kopiraj sve fajlove
+# Kopiraj ostale fajlove
 COPY . .
 
 # Kreiraj obavezne Laravel storage direktorijume
@@ -31,7 +32,7 @@ RUN mkdir -p \
     bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Build Vite assets (npm install umesto npm ci jer nema package-lock.json)
+# Build Vite assets
 RUN npm install --no-optional && npm run build
 
 EXPOSE 8080
