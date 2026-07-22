@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,12 +14,13 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Fix za Symfony 7 strict host validation u containerizovanom okruzenju
-        SymfonyRequest::setTrustedHosts([]);
+        // Prihvati sve hostove — Railway koristi interne hostove za healthcheck
+        // koji mogu da ne propadnu Symfony validaciju
+        \Symfony\Component\HttpFoundation\Request::setTrustedHosts(['.+']);
 
-        // Forsiraj HTTPS u produkciji
-        if (config('app.env') === 'production') {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
+        // Ako smo u produkciji, forsiramo HTTPS za URL generisanje
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
         }
     }
 }
