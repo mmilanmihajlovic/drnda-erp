@@ -8,7 +8,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('case_id')->constrained('funeral_cases')->cascadeOnDelete();
             $table->foreignId('item_id')->constrained('items')->restrictOnDelete();
-            $table->foreignId('order_id')->nullable()->constrained('flower_orders')->nullOnDelete();
             $table->integer('quantity')->default(1);
             $table->decimal('unit_price', 10, 2);
             $table->decimal('total_price', 10, 2);
