@@ -7,7 +7,7 @@ RUN apk add --no-cache \
     git curl zip unzip bash \
     oniguruma-dev libxml2-dev libzip-dev \
     nodejs npm \
-    && docker-php-ext-install pdo_mysql mbstring xml zip
+    && docker-php-ext-install pdo_mysql mbstring xml zip bcmath fileinfo
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -33,6 +33,4 @@ RUN npm install && npm run build
 
 EXPOSE 8080
 
-# Koristimo PHP built-in server direktno na public/ folder
-# Ovo je stabilnije od "artisan serve" u Dockeru
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
