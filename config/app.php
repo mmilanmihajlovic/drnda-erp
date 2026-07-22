@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Facade;
 
-// Normalizuj APP_URL — Symfony RequestContext::fromUri() pada ako nema scheme
 $appUrl = env('APP_URL', 'http://localhost');
 if ($appUrl && !str_contains($appUrl, '://')) {
     $appUrl = 'https://' . $appUrl;
@@ -12,7 +11,7 @@ $appUrl = rtrim($appUrl, '/');
 return [
     'name' => env('APP_NAME', 'DRNDA ERP'),
     'env' => env('APP_ENV', 'production'),
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => true, // TEMP DEBUG - vidimo gresku
     'url' => $appUrl,
     'timezone' => 'Europe/Belgrade',
     'locale' => 'en',
