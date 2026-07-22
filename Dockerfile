@@ -13,14 +13,14 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-# Instaliraj PHP pakete bez post-install skripti
+# PHP paketi bez post-install skripti (artisan ne postoji jos)
 COPY composer.json composer.lock* ./
 RUN composer install --optimize-autoloader --no-dev --no-interaction --no-scripts
 
 # Kopiraj SVE fajlove
 COPY . .
 
-# Kreiraj OBAVEZNE direktorijume pre package:discover
+# Kreiraj direktorijume pre package:discover
 RUN mkdir -p \
     bootstrap/cache \
     storage/app/public \
@@ -30,11 +30,11 @@ RUN mkdir -p \
     storage/logs \
     && chmod -R 775 bootstrap/cache storage
 
-# Sada pokrecemo package:discover (bootstrap/cache postoji)
+# package:discover (artisan + bootstrap/ su sada prisutni)
 RUN php artisan package:discover --ansi
 
-# Build Vite assets
-RUN npm install --no-optional && npm run build
+# npm install BEZ --no-optional (rollup treba @rollup/rollup-linux-x64-musl na Alpine)
+RUN npm install && npm run build
 
 EXPOSE 8080
 
