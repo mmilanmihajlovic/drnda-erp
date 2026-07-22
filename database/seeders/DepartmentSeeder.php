@@ -1,11 +1,16 @@
 <?php
 namespace Database\Seeders;
-use App\Models\Department;
 use Illuminate\Database\Seeder;
+use App\Models\Department;
 class DepartmentSeeder extends Seeder {
     public function run(): void {
-        foreach ([['name' => 'Pogrebno', 'code' => 'pogrebno'], ['name' => 'JNA', 'code' => 'jna'], ['name' => 'Cvecara', 'code' => 'cvecara']] as $d) {
-            Department::firstOrCreate(['code' => $d['code']], $d);
+        $depts = [
+            ['name' => 'Pogrebno', 'slug' => 'pogrebno'],
+            ['name' => 'JNA', 'slug' => 'jna'],
+            ['name' => 'Cvećara', 'slug' => 'cvecara'],
+        ];
+        foreach ($depts as $dept) {
+            Department::firstOrCreate(['slug' => $dept['slug']], $dept);
         }
     }
 }
