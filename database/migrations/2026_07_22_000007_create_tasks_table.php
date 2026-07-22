@@ -11,8 +11,8 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->string('status')->default('novi');
             $table->string('priority')->default('normal');
-            $table->foreignId('assigned_worker_id')->nullable()->constrained('workers')->nullOnDelete();
-            $table->foreignId('assigned_vehicle_id')->nullable()->constrained('vehicles')->nullOnDelete();
+            $table->unsignedBigInteger('assigned_worker_id')->nullable();
+            $table->unsignedBigInteger('assigned_vehicle_id')->nullable();
             $table->text('note')->nullable();
             $table->dateTime('due_at')->nullable();
             $table->timestamps();
