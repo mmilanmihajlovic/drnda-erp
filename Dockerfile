@@ -13,14 +13,11 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-# PHP paketi bez post-install skripti
 COPY composer.json composer.lock* ./
 RUN composer install --optimize-autoloader --no-dev --no-interaction --no-scripts
 
-# Kopiraj SVE fajlove
 COPY . .
 
-# Kreiraj direktorijume pre package:discover
 RUN mkdir -p \
     bootstrap/cache \
     storage/app/public \
@@ -28,15 +25,14 @@ RUN mkdir -p \
     storage/framework/sessions \
     storage/framework/views \
     storage/logs \
-    && chmod -R 775 bootstrap/cache storage
+    && chmod -R 777 bootstrap/cache storage
 
-# package:discover
 RUN php artisan package:discover --ansi
 
-# Build Vite assets (bez --no-optional, rollup treba musl native na Alpine)
 RUN npm install && npm run build
 
 EXPOSE 8080
 
-# SAMO server — migrate/seed se rade u Railway releaseCommand
-CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
+# Pokrecemo migrate odmah u CMD (ne u releaseCommand) da vidimo greske u logovima
+# APP_KEY mora biti setovan u Railway Variables
+CMD ["sh", "-c", "echo Starting... && echo PORT=$PORT && php artisan config:clear && php artisan migrate --force 2>&1 && php artisan db:seed --force 2>&1 && php artisan storage:link --force 2>&1 && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
