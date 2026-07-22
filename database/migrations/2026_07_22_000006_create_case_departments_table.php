@@ -9,11 +9,11 @@ return new class extends Migration {
             $table->foreignId('case_id')->constrained('funeral_cases')->cascadeOnDelete();
             $table->foreignId('department_id')->constrained('departments')->restrictOnDelete();
             $table->string('status')->default('novi');
-            $table->foreignId('assigned_worker_id')->nullable()->constrained('workers')->nullOnDelete();
-            $table->foreignId('assigned_vehicle_id')->nullable()->constrained('vehicles')->nullOnDelete();
+            $table->unsignedBigInteger('assigned_worker_id')->nullable();
+            $table->unsignedBigInteger('assigned_vehicle_id')->nullable();
             $table->text('note')->nullable();
             $table->dateTime('closed_at')->nullable();
-            $table->foreignId('closed_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->unsignedBigInteger('closed_by')->nullable();
             $table->timestamps();
         });
     }
