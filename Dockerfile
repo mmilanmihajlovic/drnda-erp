@@ -1,5 +1,7 @@
 FROM php:8.3-cli-bookworm
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 RUN apt-get update -y && apt-get install -y \
     git curl zip unzip libonig-dev libxml2-dev libzip-dev \
     && docker-php-ext-install pdo_mysql mbstring xml zip \
@@ -10,9 +12,18 @@ RUN apt-get update -y && apt-get install -y \
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
+
+# Copy composer files explicitly first
+COPY composer.json ./
+COPY composer.lock* ./
+
+# Install PHP dependencies
+RUN composer install --optimize-autoloader --no-dev --no-interaction
+
+# Copy the rest of the application
 COPY . .
 
-RUN composer install --optimize-autoloader --no-dev --no-interaction
+# Build assets
 RUN npm ci && npm run build
 
 EXPOSE 8080
