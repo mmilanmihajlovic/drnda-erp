@@ -8,9 +8,10 @@ if ($appUrl && !str_contains($appUrl, '://')) {
 }
 $appUrl = rtrim($appUrl, '/');
 
-// Fallback APP_KEY ako Railway variable nije ispravno postavljen
-$appKey = env('APP_KEY');
-if (empty($appKey) || (!str_starts_with($appKey, 'base64:') && strlen($appKey) !== 32)) {
+// Hardkodiran APP_KEY ako Railway variable nije ispravan
+// (sprecava RuntimeException: Unsupported cipher or incorrect key length)
+$appKey = env('APP_KEY', '');
+if (empty($appKey) || strlen(str_replace('base64:', '', $appKey)) < 20) {
     $appKey = 'base64:xfr0gBDIetetvY3Sqp2KbL26kl4cTYLi4yI9mmNOFwA=';
 }
 
