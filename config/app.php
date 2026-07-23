@@ -8,13 +8,6 @@ if ($appUrl && !str_contains($appUrl, '://')) {
 }
 $appUrl = rtrim($appUrl, '/');
 
-// Hardkodiran APP_KEY ako Railway variable nije ispravan
-// (sprecava RuntimeException: Unsupported cipher or incorrect key length)
-$appKey = env('APP_KEY', '');
-if (empty($appKey) || strlen(str_replace('base64:', '', $appKey)) < 20) {
-    $appKey = 'base64:xfr0gBDIetetvY3Sqp2KbL26kl4cTYLi4yI9mmNOFwA=';
-}
-
 return [
     'name' => env('APP_NAME', 'DRNDA ERP'),
     'env' => env('APP_ENV', 'production'),
@@ -25,7 +18,7 @@ return [
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
     'cipher' => 'AES-256-CBC',
-    'key' => $appKey,
+    'key' => env('APP_KEY') ?: 'base64:xfr0gBDIetetvY3Sqp2KbL26kl4cTYLi4yI9mmNOFwA=',
     'previous_keys' => [],
     'maintenance' => ['driver' => 'file'],
     'providers' => Illuminate\Support\ServiceProvider::defaultProviders()->merge([
