@@ -28,6 +28,6 @@ return [
     'cache' => [
         'expiration_time' => \DateInterval::createFromDateString('24 hours'),
         'key' => 'spatie.permission.cache',
-        'store' => 'default',
+        'store' => 'file',  // Eksplicitno file cache, ne default (koji moze biti redis)
     ],
 ];
