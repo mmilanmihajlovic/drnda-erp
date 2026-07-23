@@ -5,8 +5,8 @@
     "dockerfilePath": "Dockerfile"
   },
   "deploy": {
-    "releaseCommand": "php artisan migrate --force; php artisan db:seed --force || true; php artisan storage:link --force || true",
+    "releaseCommand": "php artisan migrate --force; php artisan db:seed --force || true",
     "healthcheckPath": "/up",
-    "healthcheckTimeout": 60
+    "healthcheckTimeout": 300
   }
 }
