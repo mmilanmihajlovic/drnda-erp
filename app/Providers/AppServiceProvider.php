@@ -14,11 +14,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Prihvati sve hostove — Railway koristi interne hostove za healthcheck
-        // koji mogu da ne propadnu Symfony validaciju
-        \Symfony\Component\HttpFoundation\Request::setTrustedHosts(['.+']);
-
-        // Ako smo u produkciji, forsiramo HTTPS za URL generisanje
+        // URL::forceScheme za produkciju (HTTPS generisanje)
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
