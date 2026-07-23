@@ -7,7 +7,7 @@ RUN apk add --no-cache \
     git curl zip unzip bash \
     oniguruma-dev libxml2-dev libzip-dev \
     nodejs npm \
-    && docker-php-ext-install pdo_mysql mbstring xml zip bcmath fileinfo
+    && docker-php-ext-install pdo_mysql mbstring xml zip
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
